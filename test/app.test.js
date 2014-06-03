@@ -23,15 +23,15 @@ describe("app", function() {
         });
 
         describe("when the user starts a session", function() {
-            it("should ask them want they want to do", function() {
+            it("should ask them to select an option", function() {
                 return tester
                     .start()
                     .check.interaction({
                         state: 'states:start',
                         reply: [
-                            'Hi there! What do you want to do?',
+                            'Welcome to MPR! Please select an option.',
                             '1. Show this menu again',
-                            '2. Show a teapot',
+                            '2. Search for medicine',
                             '3. Exit'
                         ].join('\n')
                     })
@@ -47,9 +47,9 @@ describe("app", function() {
                     .check.interaction({
                         state: 'states:start',
                         reply: [
-                            'Hi there! What do you want to do?',
+                            'Welcome to MPR! Please select an option.',
                             '1. Show this menu again',
-                            '2. Show a teapot',
+                            '2. Search for medicine',
                             '3. Exit'
                         ].join('\n')
                     })
@@ -57,13 +57,13 @@ describe("app", function() {
             });
         });
 
-        describe("when the user asks to see a teapot", function() {
-            it("should show them a teapot", function() {
+        describe("when the user asks to search for medicine", function() {
+            it("should allow input for searching", function() {
                 return tester
                     .setup.user.state('states:start')
                     .input('2')
                     .check.interaction({
-                        state: 'states:teapot',
+                        state: 'states:search',
                         reply: 'Hello world'
                     })
                     .check.reply.ends_session()

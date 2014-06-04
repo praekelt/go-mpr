@@ -2,14 +2,16 @@ module.exports = function() {
     return [{
         "request": {
             "method": "GET",
-            "url": "http://httpbin.org/status/418",
-            "headers": {
-                "Content-Type": ["text/plain"]
+            "url": "http://mpr.code4sa.org/api/search-lite",
+            "params": {
+                "q": "salbutamol"
             }
         },
         "response": {
-            "code": 418,
-            "body": 'Hello world'
+            "code": 200,
+            "data": {
+                "data": "salbutamol"
+            }
         }
     }];
 };

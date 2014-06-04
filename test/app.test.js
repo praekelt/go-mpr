@@ -58,13 +58,39 @@ describe("app", function() {
         });
 
         describe("when the user asks to search for medicine", function() {
-            it("should allow input for searching", function() {
+            it("should ask for input", function() {
                 return tester
                     .setup.user.state('states:start')
                     .input('2')
                     .check.interaction({
-                        state: 'states:search',
-                        reply: 'Hello world'
+                        state: 'states:input',
+                        reply: 'Which medicine would you like to search for?'
+                    })
+                    .run();
+            });
+        });
+        
+        describe("test: when the user enters content to be posted", function() {
+            it("should return the content", function() {
+                return tester
+                    .setup.user.state('states:post')
+                    .input('hello world')
+                    .check.interaction({
+                        state: 'states:input',
+                        reply: 'hello world'
+                    })
+                    .run();
+            });
+        });
+
+        describe("when the user enters medicine to search for", function() {
+            it("should return medicine details", function() {
+                return tester
+                    .setup.user.state('states:input')
+                    .input('salbutamol')
+                    .check.interaction({
+                        state: 'states:start',
+                        reply: 'salbutamol'
                     })
                     .check.reply.ends_session()
                     .run();

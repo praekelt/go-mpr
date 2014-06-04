@@ -30,7 +30,7 @@ go.app = function() {
             });
         });
 
-        /*self.states.add('states:input', function(name) {
+        self.states.add('states:input', function(name) {
             return new FreeText(name, {
                 question: 'Which medicine would you like to search for?',
 
@@ -45,7 +45,7 @@ go.app = function() {
                         });
                 }
             });
-        });*/
+        });
 
         self.states.add('states:search', function(name) {
             return new FreeText(name, {
@@ -53,15 +53,15 @@ go.app = function() {
 
                 next: function(content) {
                     return self
-                        .http.post('http://httpbin.org/post', {
-                            data: {message: content}
+                        .http.get('http://mpr.code4sa.org/api/search-lite', {
+                            params: {q: content}
                         })
                         .then(function(resp) {
                             return {
                                 name: 'states:done',
                                 creator_opts: {
-                                    method: 'post',
-                                    echo: resp.data.json.message
+                                    method: 'get',
+                                    echo: resp.data.data
                                 }
                             };
                         });
@@ -70,6 +70,13 @@ go.app = function() {
         });
 
         self.states.add('states:done', function(name, opts) {
+            /*var results = opts.echo;
+            var s = "";
+            for (var key in results) {
+                s.concat(key);
+                s.concat(" ");
+            }
+            s.concat(".");*/
             return new EndState(name, {
                 text: [
                     "You just performed a " + opts.method + ".",

@@ -75,10 +75,10 @@ describe("app", function() {
             it("should should post their response", function() {
                 return tester
                     .setup.user.state('states:search')
-                    .input('hello world!')
+                    .input('salbutamol')
                     .check(function(api) {
                         var req = api.http.requests[0];
-                        assert.deepEqual(req.data, {message: 'hello world!'});
+                        assert.deepEqual(req.params, {q: 'salbutamol'});
                     })
                     .run();
             });
@@ -86,12 +86,12 @@ describe("app", function() {
             it("should tell them the result", function() {
                 return tester
                     .setup.user.state('states:search')
-                    .input('hello world!')
+                    .input('salbutamol')
                     .check.interaction({
                         state: 'states:done',
                         reply: [
-                            "You just performed a post.",
-                            "Searching for: hello world!"
+                            "You just performed a get.",
+                            "Searching for: salbutamol"
                         ].join(' ')
                     })
                     .run();

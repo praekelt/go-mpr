@@ -8,13 +8,14 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
-    var HttpApi = vumigo.http.api.HttpApi;
+    //var HttpApi = vumigo.http.api.HttpApi;
+    var JsonApi = vumigo.http.api.JsonApi;
 
     var GoApp = App.extend(function(self) {
         App.call(self, 'states:start');
 
        self.init = function() {
-           self.http = new HttpApi(self.im);
+           self.http = new JsonApi(self.im);
        };
 
         self.states.add('states:start', function(name) {
@@ -23,7 +24,7 @@ go.app = function() {
 
                 choices: [
                     new Choice('states:start', 'Show this menu again'),
-                    new Choice('states:input', 'Search for medicine'),
+                    new Choice('states:search', 'Search for medicine'),
                     new Choice('states:end', 'Exit')],
 
                 next: function(choice) {
@@ -32,7 +33,7 @@ go.app = function() {
             });
         });
 
-        self.states.add('states:input', function(name) {
+        /*self.states.add('states:input', function(name) {
             return new FreeText(name, {
                 question: 'Which medicine would you like to search for?',
 
@@ -47,11 +48,11 @@ go.app = function() {
                         });
                 }
             });
-        });
+        });*/
 
-        self.states.add('states:post', function(name) {
+        self.states.add('states:search', function(name) {
             return new FreeText(name, {
-                question: 'What would you like to post?',
+                question: 'Which medicine would you like to search for?',
 
                 next: function(content) {
                     return self
@@ -60,7 +61,7 @@ go.app = function() {
                         })
                         .then(function(resp) {
                             return {
-                                name: 'states:start',
+                                name: 'states:done',
                                 creator_opts: {
                                     method: 'post',
                                     echo: resp.data.json.message
@@ -70,15 +71,14 @@ go.app = function() {
                 }
             });
         });
-        
-        self.states.add('states:teapot', function(name) {
-            return self
-            .http.get('http://httpbin.org/status/418')
-            .catch(function(e) {
-                return new EndState(name, {
-                    text: e.response.data,
-                    next: 'states:start'
-                });
+
+        self.states.add('states:done', function(name, opts) {
+            return new EndState(name, {
+                text: [
+                    "You just performed a " + opts.method + ".",
+                    "Searching for: " + opts.echo
+                ].join(' '),
+                next: 'states:start'
             });
         });
 

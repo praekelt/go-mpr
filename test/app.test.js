@@ -1,3 +1,4 @@
+var assert = require('assert');
 var vumigo = require('vumigo_v02');
 var fixtures = require('./fixtures');
 var AppTester = vumigo.AppTester;
@@ -57,42 +58,42 @@ describe("app", function() {
             });
         });
 
-        describe("when the user asks to search for medicine", function() {
-            it("should ask for input", function() {
-                return tester
-                    .setup.user.state('states:start')
-                    .input('2')
-                    .check.interaction({
-                        state: 'states:input',
-                        reply: 'Which medicine would you like to search for?'
-                    })
-                    .run();
+        describe("when the user chooses to search for medicine", function() {
+                it("should ask them to enter medicine name", function() {
+                    return tester
+                        .setup.user.state('states:start')
+                        .input('2')
+                        .check.interaction({
+                            state: 'states:search',
+                            reply: 'Which medicine would you like to search for?'
+                        })
+                        .run();
+                });
             });
-        });
-        
-        describe("test: when the user enters content to be posted", function() {
-            it("should return the content", function() {
-                return tester
-                    .setup.user.state('states:post')
-                    .input('hello world')
-                    .check.interaction({
-                        state: 'states:input',
-                        reply: 'hello world'
-                    })
-                    .run();
-            });
-        });
 
-        describe("when the user enters medicine to search for", function() {
-            it("should return medicine details", function() {
+        describe("when the user enters content to be posted", function() {
+            it("should should post their response", function() {
                 return tester
-                    .setup.user.state('states:input')
-                    .input('salbutamol')
-                    .check.interaction({
-                        state: 'states:start',
-                        reply: 'salbutamol'
+                    .setup.user.state('states:search')
+                    .input('hello world!')
+                    .check(function(api) {
+                        var req = api.http.requests[0];
+                        assert.deepEqual(req.data, {message: 'hello world!'});
                     })
-                    .check.reply.ends_session()
+                    .run();
+            });
+
+            it("should tell them the result", function() {
+                return tester
+                    .setup.user.state('states:search')
+                    .input('hello world!')
+                    .check.interaction({
+                        state: 'states:done',
+                        reply: [
+                            "You just performed a post.",
+                            "Searching for: hello world!"
+                        ].join(' ')
+                    })
                     .run();
             });
         });

@@ -90,9 +90,12 @@ describe("app", function() {
                     .check.interaction({
                         state: 'states:search:results',
                         reply: [
-                            "Showing results for search \'salbutamol\'.",
-                            "Searching for: Vari-Salbutamol 2Mg/5Ml Syrup"
-                        ].join(' ')
+                            "Choose your medicine:",
+                            "1. Vari-Salbutamol 2Mg/5Ml Syrup: R 22.46",
+                            "2. Venteze: R 25.88",
+                            "3. Asthavent Syrup: R 26.35",
+                            "4. More"
+                        ].join('\n')
                     })
                     .run();
             });

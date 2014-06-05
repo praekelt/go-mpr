@@ -17,10 +17,9 @@ go.app = function() {
 
         self.states.add('states:start', function(name) {
             return new ChoiceState(name, {
-                question: 'Welcome to MPR! Please select an option.',
+                question: 'Welcome to the Medicine Price Registry! Please select an option.',
 
                 choices: [
-                    new Choice('states:start', 'Show this menu again'),
                     new Choice('states:search', 'Search for medicine'),
                     new Choice('states:end', 'Exit')],
 
@@ -74,7 +73,7 @@ go.app = function() {
 
         self.states.add('states:end', function(name) {
             return new EndState(name, {
-                text: 'Thanks, cheers!',
+                text: 'Thank you!',
                 next: 'states:start'
             });
         });

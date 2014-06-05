@@ -30,28 +30,9 @@ describe("app", function() {
                     .check.interaction({
                         state: 'states:start',
                         reply: [
-                            'Welcome to MPR! Please select an option.',
-                            '1. Show this menu again',
-                            '2. Search for medicine',
-                            '3. Exit'
-                        ].join('\n')
-                    })
-                    .run();
-            });
-        });
-
-        describe("when the user asks to see the menu again", function() {
-            it("should show the menu again", function() {
-                return tester
-                    .setup.user.state('states:start')
-                    .input('1')
-                    .check.interaction({
-                        state: 'states:start',
-                        reply: [
-                            'Welcome to MPR! Please select an option.',
-                            '1. Show this menu again',
-                            '2. Search for medicine',
-                            '3. Exit'
+                            'Welcome to the Medicine Price Registry! Please select an option.',
+                            '1. Search for medicine',
+                            '2. Exit'
                         ].join('\n')
                     })
                     .run();
@@ -62,7 +43,7 @@ describe("app", function() {
                 it("should ask them to enter medicine name", function() {
                     return tester
                         .setup.user.state('states:start')
-                        .input('2')
+                        .input('1')
                         .check.interaction({
                             state: 'states:search',
                             reply: 'Which medicine would you like to search for?'
@@ -105,10 +86,10 @@ describe("app", function() {
             it("should say thank you and end the session", function() {
                 return tester
                     .setup.user.state('states:start')
-                    .input('3')
+                    .input('2')
                     .check.interaction({
                         state: 'states:end',
-                        reply: 'Thanks, cheers!'
+                        reply: 'Thank you!'
                     })
                     .check.reply.ends_session()
                     .run();

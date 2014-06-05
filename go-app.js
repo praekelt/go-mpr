@@ -8,7 +8,7 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
-    //var HttpApi = vumigo.http.api.HttpApi;
+    var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
     var JsonApi = vumigo.http.api.JsonApi;
 
     var GoApp = App.extend(function(self) {
@@ -44,9 +44,8 @@ go.app = function() {
                         })
                         .then(function(resp) {
                             return {
-                                name: 'states:done',
+                                name: 'states:search:results',
                                 creator_opts: {
-                                    search_query: content,
                                     medicines: resp.data
                                 }
                             };
@@ -55,19 +54,24 @@ go.app = function() {
             });
         });
 
-        self.states.add('states:done', function(name, opts) {
-            var result = opts.medicines
+        self.states.add('states:search:results', function(name, opts) {
+            var choices = opts.medicines
                 .map(function(d) {
-                    return [d.name, d.sep].join(': ');
-                })
-                .join('\n');
+                    return new Choice(d.id, [d.name, d.sep].join(': '));
+                });
 
-            return new EndState(name, {
-                text: [
-                    "Showing results for search \'" + opts.search_query + "\'.",
-                    result
-                ].join(' '),
-                next: 'states:start'
+            return new PaginatedChoiceState(name, {
+                question: 'Choose your medicine:',
+                choices: choices,
+                characters_per_page: 140,
+                options_per_page: 3,
+                next: function(choice) {
+                    if (choice.value !== "not_available")
+                        return self.set_ward_data(choice,opts);
+                    else {
+                        return self.handle_unavailable_location(choice,opts);
+                    }
+                }
             });
         });
 

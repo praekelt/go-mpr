@@ -88,7 +88,7 @@ describe("app", function() {
                     .setup.user.state('states:search')
                     .input('salbutamol')
                     .check.interaction({
-                        state: 'states:done',
+                        state: 'states:search:results',
                         reply: [
                             "Showing results for search \'salbutamol\'.",
                             "Searching for: Vari-Salbutamol 2Mg/5Ml Syrup"

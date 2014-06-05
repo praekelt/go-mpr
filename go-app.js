@@ -46,8 +46,8 @@ go.app = function() {
                             return {
                                 name: 'states:done',
                                 creator_opts: {
-                                    search: content,
-                                    echo: resp.data
+                                    search_query: content,
+                                    medicines: resp.data
                                 }
                             };
                         });
@@ -56,16 +56,16 @@ go.app = function() {
         });
 
         self.states.add('states:done', function(name, opts) {
-            // extract results
-            var results = "";
-            for(var i=0; i<opts.echo.length; i++) {
-                results.concat("\n" + opts.echo[i].name);
-            }
+            var result = opts.medicines
+                .map(function(d) {
+                    return [d.name, d.sep].join(': ');
+                })
+                .join('\n');
 
             return new EndState(name, {
                 text: [
-                    "Showing results for search \'" + opts.search + "\'.",
-                    results[0],
+                    "Showing results for search \'" + opts.search_query + "\'.",
+                    result
                 ].join(' '),
                 next: 'states:start'
             });

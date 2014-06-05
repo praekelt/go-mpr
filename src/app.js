@@ -1,11 +1,11 @@
 go.app = function() {
     var vumigo = require('vumigo_v02');
     var App = vumigo.App;
+    var BookletState = vumigo.states.BookletState;
     var Choice = vumigo.states.Choice;
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
-    //var HttpApi = vumigo.http.api.HttpApi;
     var JsonApi = vumigo.http.api.JsonApi;
 
     var GoApp = App.extend(function(self) {
@@ -44,7 +44,7 @@ go.app = function() {
                                 name: 'states:done',
                                 creator_opts: {
                                     search_query: content,
-                                    echo: resp.data
+                                    medicines: resp.data
                                 }
                             };
                         });
@@ -53,16 +53,16 @@ go.app = function() {
         });
 
         self.states.add('states:done', function(name, opts) {
-            // extract results
-            var results = "";
-            for(var i=0; i<opts.echo.length; i++) {
-                results.concat("\n" + opts.echo[i].name);
-            }
+            var result = opts.medicines
+                .map(function(d) {
+                    return [d.name, d.sep].join(': ');
+                })
+                .join('\n');
 
             return new EndState(name, {
                 text: [
                     "Showing results for search \'" + opts.search_query + "\'.",
-                    results
+                    result
                 ].join(' '),
                 next: 'states:start'
             });

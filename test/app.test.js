@@ -91,7 +91,7 @@ describe("app", function() {
                         state: 'states:done',
                         reply: [
                             "You just performed a get.",
-                            "Searching for: salbutamol"
+                            "Searching for: Vari-Salbutamol 2Mg/5Ml Syrup"
                         ].join(' ')
                     })
                     .run();

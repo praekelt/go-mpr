@@ -64,7 +64,7 @@ go.app = function() {
                                 name: 'states:done',
                                 creator_opts: {
                                     method: 'get',
-                                    echo: resp.data.data
+                                    echo: resp.data[0]
                                 }
                             };
                         });
@@ -73,17 +73,10 @@ go.app = function() {
         });
 
         self.states.add('states:done', function(name, opts) {
-            /*var results = opts.echo;
-            var s = "";
-            for (var key in results) {
-                s.concat(key);
-                s.concat(" ");
-            }
-            s.concat(".");*/
             return new EndState(name, {
                 text: [
                     "You just performed a " + opts.method + ".",
-                    "Searching for: " + opts.echo
+                    "Searching for: " + opts.echo.name
                 ].join(' '),
                 next: 'states:start'
             });

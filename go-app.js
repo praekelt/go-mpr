@@ -65,11 +65,7 @@ go.app = function() {
                 characters_per_page: 160,
                 options_per_page: 3,
                 next: function(choice) {
-                    if (choice.value !== "not_available")
-                        return self.set_ward_data(choice,opts);
-                    else {
-                        return self.handle_unavailable_location(choice,opts);
-                    }
+                    return self.set_ward_data(choice,opts);
                 }
             });
         });

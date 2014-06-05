@@ -64,9 +64,7 @@ go.app = function() {
                 choices: choices,
                 characters_per_page: 160,
                 options_per_page: 3,
-                next: function(choice) {
-                    return self.set_ward_data(choice,opts);
-                }
+                next: function(choice) {}
             });
         });
 

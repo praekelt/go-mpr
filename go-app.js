@@ -47,7 +47,7 @@ go.app = function() {
                                 name: 'states:done',
                                 creator_opts: {
                                     search: content,
-                                    echo: resp.data[0]
+                                    echo: resp.data
                                 }
                             };
                         });
@@ -56,10 +56,16 @@ go.app = function() {
         });
 
         self.states.add('states:done', function(name, opts) {
+            // extract results
+            var results = "";
+            for(var i=0; i<opts.echo.length; i++) {
+                results.concat("\n" + opts.echo[i].name);
+            }
+
             return new EndState(name, {
                 text: [
-                    "You searched for \'" + opts.search + "\'.",
-                    "Searching for: " + opts.echo.name
+                    "Showing results for search \'" + opts.search + "\'.",
+                    results[0],
                 ].join(' '),
                 next: 'states:start'
             });

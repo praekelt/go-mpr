@@ -33,23 +33,6 @@ go.app = function() {
             });
         });
 
-        self.states.add('states:input', function(name) {
-            return new FreeText(name, {
-                question: 'Which medicine would you like to search for?',
-
-                next: function(content) {
-                    return self
-                        .http.get('http://mpr.code4sa.org/api/search-lite', {params:{q:content}})
-                        .then(function(resp) {
-                            return new EndState(name, {
-                                text: resp.data,
-                                name: 'states:start',
-                            });
-                        });
-                }
-            });
-        });
-
         self.states.add('states:search', function(name) {
             return new FreeText(name, {
                 question: 'Which medicine would you like to search for?',

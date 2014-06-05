@@ -90,7 +90,7 @@ describe("app", function() {
                     .check.interaction({
                         state: 'states:done',
                         reply: [
-                            "You just performed a get.",
+                            "You searched for \'salbutamol\'.",
                             "Searching for: Vari-Salbutamol 2Mg/5Ml Syrup"
                         ].join(' ')
                     })

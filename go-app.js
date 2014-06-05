@@ -46,7 +46,7 @@ go.app = function() {
                             return {
                                 name: 'states:done',
                                 creator_opts: {
-                                    method: 'get',
+                                    search: content,
                                     echo: resp.data[0]
                                 }
                             };
@@ -58,7 +58,7 @@ go.app = function() {
         self.states.add('states:done', function(name, opts) {
             return new EndState(name, {
                 text: [
-                    "You just performed a " + opts.method + ".",
+                    "You searched for \'" + opts.search + "\'.",
                     "Searching for: " + opts.echo.name
                 ].join(' '),
                 next: 'states:start'

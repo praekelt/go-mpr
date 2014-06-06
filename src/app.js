@@ -61,7 +61,27 @@ go.app = function() {
                 choices: choices,
                 characters_per_page: 160,
                 options_per_page: 3,
-                next: function(choice) {}
+                next: function(choice) {
+                    return self
+                        .http.get('http://mpr.code4sa.org/api/detail', {
+                            params: {product: choice.value.key}
+                        })
+                        .then(function(resp) {
+                            return {
+                                name: 'states:search:deatils',
+                                creator_opts: {
+                                    details: resp.data
+                                }
+                            };
+                        });     
+                }
+            });
+        });
+
+        self.states.add('states:search:details', function(name, opts) {
+            return new EndState(name, {
+                text: opts.details,
+                next: 'states:start'
             });
         });
 

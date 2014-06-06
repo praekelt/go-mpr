@@ -52,8 +52,8 @@ describe("app", function() {
                 });
             });
 
-        describe("when the user enters content to be posted", function() {
-            it("should should post their response", function() {
+        describe("when the user enters medicine to be searched for", function() {
+            it("should send a request to the registry", function() {
                 return tester
                     .setup.user.state('states:search')
                     .input('salbutamol')

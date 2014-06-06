@@ -82,6 +82,82 @@ describe("app", function() {
             });
         });
 
+        describe("when the user selects a search result", function() {
+
+            beforeEach(function() {
+                var medicines = [
+                    {
+                        "dosage_form": "syrup", 
+                        "sep": "R 22.46", 
+                        "id": 4333, 
+                        "name": "Vari-Salbutamol 2Mg/5Ml Syrup"
+                    }, 
+                    {
+                        "dosage_form": "syrup", 
+                        "sep": "R 25.88", 
+                        "id": 6164, 
+                        "name": "Venteze"
+                    }, 
+                    {
+                        "dosage_form": "syrup", 
+                        "sep": "R 26.35", 
+                        "id": 2893, 
+                        "name": "Asthavent Syrup"
+                    }, 
+                    {
+                        "dosage_form": "capsule", 
+                        "sep": "R 31.14", 
+                        "id": 2741, 
+                        "name": "Asthavent Dp-Caps"
+                    }, 
+                    {
+                        "dosage_form": "syrup", 
+                        "sep": "R 35.94", 
+                        "id": 2894, 
+                        "name": "Asthavent Syrup"
+                    }, 
+                    {
+                        "dosage_form": "inhaler", 
+                        "sep": "R 41.57", 
+                        "id": 2887, 
+                        "name": "Asthavent"
+                    }
+                ];
+
+                tester
+                    .setup.user.state('states:search:results', {
+                        creator_opts: { medicines : medicines }
+                });
+            });
+
+            it ("should send a request to the registry", function() {
+                return tester
+                    .input('1')
+                    .check(function(api) {
+                        var req = api.http.requests[0];
+                        assert.deepEqual(req.params, {product: '4333'});
+                    })
+                    .run();
+            });
+
+            it ("should display the medicine details", function() {
+                return tester
+                    .input('1')
+                    .check.interaction({
+                        state: 'states:search:details',
+                        reply: [
+                            "Vari-Salbutamol 2Mg/5Ml Syrup",
+                            "Schedule: S2",
+                            "Dosage form: syrup",
+                            "Reg. No.: 35/10.2/0142",
+                            "SEP: R 22.46", 
+                        ].join('\n'),
+                    })
+                    .check.reply.ends_session()
+                    .run();
+            });
+        });
+
         describe("when the user asks to exit", function() {
             it("should say thank you and end the session", function() {
                 return tester

@@ -67,11 +67,11 @@ go.app = function() {
                 next: function(choice) {
                     return self
                         .http.get('http://mpr.code4sa.org/api/detail', {
-                            params: {product: choice.value.key}
+                            params: {product: choice.value}
                         })
                         .then(function(resp) {
                             return {
-                                name: 'states:search:deatils',
+                                name: 'states:search:details',
                                 creator_opts: {
                                     details: resp.data
                                 }
@@ -83,7 +83,13 @@ go.app = function() {
 
         self.states.add('states:search:details', function(name, opts) {
             return new EndState(name, {
-                text: opts.details,
+                text: [
+                    opts.details.name,
+                    "Schedule: ".concat(opts.details.schedule),
+                    "Dosage form: ".concat(opts.details.dosage_form),
+                    "Reg. No.: ".concat(opts.details.regno),
+                    "SEP: ".concat(opts.details.sep)
+                ].join('\n'),
                 next: 'states:start'
             });
         });

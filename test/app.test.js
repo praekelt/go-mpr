@@ -81,28 +81,6 @@ describe("app", function() {
                     })
                     .run();
             });
-
-            it ("should display the next page of medicine details", function() {
-                return tester
-                    .setup.user.state({
-                        name: 'states:search',
-                        metadata: {page_start: 5}
-                    })
-                    .input('salbutamol')
-                    .check.interaction({
-                        state: 'states:search:results',
-                        reply: [
-                            "Choose your medicine:",
-                            "1. Asthavent Dp-Caps: R 31.14",
-                            "2. Asthavent Syrup: R 35.94",
-                            "3. Asthavent R41.57",
-                            "4. Return to menu",
-                            "5. More", 
-                            "6. Back"
-                        ].join('\n'),
-                    })
-                    .run();
-            });
         });
 
         describe("when the user selects a search result", function() {
@@ -144,6 +122,12 @@ describe("app", function() {
                         "sep": "R 41.57", 
                         "id": 2887, 
                         "name": "Asthavent"
+                    }, 
+                    {
+                        "dosage_form": "inhaler", 
+                        "sep": "R 42.42", 
+                        "id": 5811, 
+                        "name": "Venteze Cfc Free"
                     }
                 ];
 
@@ -177,6 +161,39 @@ describe("app", function() {
                         ].join('\n'),
                     })
                     .check.reply.ends_session()
+                    .run();
+            });
+
+            it ("should return to the main menu", function() {
+                return tester
+                    .input('4')
+                    .check.interaction({
+                        state: 'states:start',
+                        reply: [
+                            'Welcome to the Medicine Price Registry! Please select an option.',
+                            '1. Search for medicine',
+                            '2. Exit'
+                        ].join('\n'),
+                    })
+                    .run();
+            });
+
+
+            it ("should display the next page of medicine details", function() {
+                return tester
+                    .input('5')
+                    .check.interaction({
+                        state: 'states:search:results',
+                        reply: [
+                            "Choose your medicine:",
+                            "1. Asthavent Dp-Caps: R 31.14",
+                            "2. Asthavent Syrup: R 35.94",
+                            "3. Asthavent: R 41.57",
+                            "4. Return to menu",
+                            "5. More", 
+                            "6. Back"
+                        ].join('\n'),
+                    })
                     .run();
             });
         });

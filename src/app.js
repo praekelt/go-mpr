@@ -58,7 +58,7 @@ go.app = function() {
 
             // insert option to return to main menu every 3 options
             // 4 options per page, 4th option is that to return
-            for (var i=3; i < choices.length; i+=4) {
+            for (var i=3; i < choices.length + (choices.length / 4); i+=4) {
                 choices.splice(i, 0, new Choice('states:start', 'Return to menu'));
             }
 
@@ -73,6 +73,9 @@ go.app = function() {
                 characters_per_page: 160,
                 options_per_page: 4,
                 next: function(choice) {
+                    if (choice.key == 'states:start') {
+                        return choice.key;
+                    }
                     return self
                         .http.get('http://mpr.code4sa.org/api/detail', {
                             params: {product: choice.value}

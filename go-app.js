@@ -76,21 +76,22 @@ go.app = function() {
                 characters_per_page: 160,
                 options_per_page: 4,
                 next: function(choice) {
-                    if (choice.key == 'states:start') {
-                        return choice.key;
-                    }
-                    return self
-                        .http.get('http://mpr.code4sa.org/api/detail', {
-                            params: {product: choice.value}
-                        })
-                        .then(function(resp) {
-                            return {
-                                name: 'states:search:details',
-                                creator_opts: {
-                                    details: resp.data
-                                }
-                            };
-                        });     
+                    if (choice.value == 'states:start') {
+                        return choice.value;
+                    } else {
+                        return self
+                            .http.get('http://mpr.code4sa.org/api/detail', {
+                                params: {product: choice.value}
+                            })
+                            .then(function(resp) {
+                                return {
+                                    name: 'states:search:details',
+                                    creator_opts: {
+                                        details: resp.data
+                                    }
+                                };
+                            }); 
+                    }    
                 }
             });
         });

@@ -196,6 +196,22 @@ describe("app", function() {
                     })
                     .run();
             });
+
+            it ("should display the last page of medicine details", function() {
+                return tester
+                    .setup.user.state({ metadata: {page_start: 5} })
+                    .input('5')
+                    .check.interaction({
+                        state: 'states:search:results',
+                        reply: [
+                            "Choose your medicine:",
+                            "1. Venteze Cfc Free: R 42.42",
+                            "2. Return to menu", 
+                            "3. Back"
+                        ].join('\n'),
+                    })
+                    .run();
+            });
         });
 
         describe("when the user asks to exit", function() {

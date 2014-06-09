@@ -75,8 +75,31 @@ describe("app", function() {
                             "1. Vari-Salbutamol 2Mg/5Ml Syrup: R 22.46",
                             "2. Venteze: R 25.88",
                             "3. Asthavent Syrup: R 26.35",
-                            "4. More"
+                            "4. Return to menu",
+                            "5. More"
                         ].join('\n')
+                    })
+                    .run();
+            });
+
+            it ("should display the next page of medicine details", function() {
+                return tester
+                    .setup.user.state({
+                        name: 'states:search',
+                        metadata: {page_start: 5}
+                    })
+                    .input('salbutamol')
+                    .check.interaction({
+                        state: 'states:search:results',
+                        reply: [
+                            "Choose your medicine:",
+                            "1. Asthavent Dp-Caps: R 31.14",
+                            "2. Asthavent Syrup: R 35.94",
+                            "3. Asthavent R41.57",
+                            "4. Return to menu",
+                            "5. More", 
+                            "6. Back"
+                        ].join('\n'),
                     })
                     .run();
             });

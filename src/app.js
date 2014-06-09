@@ -56,11 +56,22 @@ go.app = function() {
                     return new Choice(d.id, [d.name, d.sep].join(': '));
                 });
 
+            // insert option to return to main menu every 3 options
+            // 4 options per page, 4th option is that to return
+            for (var i=3; i < choices.length; i+=4) {
+                choices.splice(i, 0, new Choice('states:start', 'Return to menu'));
+            }
+
+            // add return to menu as last element on last page
+            if (choices.length % 4 !== 0) {
+                choices.splice(choices.length-1, 0, new Choice('states:start', 'Return to menu'));
+            }
+
             return new PaginatedChoiceState(name, {
                 question: 'Choose your medicine:',
                 choices: choices,
                 characters_per_page: 160,
-                options_per_page: 3,
+                options_per_page: 4,
                 next: function(choice) {
                     return self
                         .http.get('http://mpr.code4sa.org/api/detail', {

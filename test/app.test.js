@@ -128,7 +128,7 @@ describe("app", function() {
                         "sep": "R 42.42", 
                         "id": 5811, 
                         "name": "Venteze Cfc Free"
-                    }
+                    },
                 ];
 
                 tester
@@ -199,7 +199,7 @@ describe("app", function() {
 
             it ("should display the last page of medicine details", function() {
                 return tester
-                    .setup.user.state({ metadata: {page_start: 5} })
+                    .setup.user.state.metadata( {page_start: 5} )
                     .input('5')
                     .check.interaction({
                         state: 'states:search:results',

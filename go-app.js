@@ -66,9 +66,9 @@ go.app = function() {
             }
 
             // FOR TESTING
-            //for (var j=0; j < choices.length; j++) {
-            //    console.log(choices[j].label);
-            //}
+            for (var j=0; j < choices.length; j++) {
+                console.log(choices[j].label);
+            }
 
             return new PaginatedChoiceState(name, {
                 question: 'Choose your medicine:',

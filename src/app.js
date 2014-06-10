@@ -62,11 +62,6 @@ go.app = function() {
                 choices.splice(i, 0, new Choice('states:start', 'Return to menu'));
             }
 
-            // FOR TESTING
-            //for (var j=0; j < choices.length; j++) {
-            //    console.log(choices[j].label);
-            //}
-
             return new PaginatedChoiceState(name, {
                 question: 'Choose your medicine:',
                 choices: choices,

@@ -16,7 +16,8 @@ describe("app", function() {
 
             tester
                 .setup.config.app({
-                    name: 'test_app'
+                    name: 'test_app',
+                    endpoints: {sms: {delivery_class: 'sms'}}
                 })
                 .setup(function(api) {
                     fixtures().forEach(api.http.fixtures.add);
@@ -232,10 +233,22 @@ describe("app", function() {
                 });
             });
 
-            describe("when the user asks to return to the main menu", function() {
-                it.only ("should return to the main menu", function() {
+            describe("when the user asks to receive an sms", function() {
+                it ("should send an sms", function() {
                     return tester
                         .input('1')
+                        .check.interaction({
+                            state: 'states:search:sms',
+                            reply: 'An sms has been sent to you'
+                        })
+                        .run();
+                });
+            });
+
+            describe("when the user asks to return to the main menu", function() {
+                it ("should return to the main menu", function() {
+                    return tester
+                        .input('2')
                         .check.interaction({
                             state: 'states:start',
                             reply: [
@@ -243,18 +256,6 @@ describe("app", function() {
                                 '1. Search for medicine',
                                 '2. Exit'
                             ].join('\n')
-                        })
-                        .run();
-                });
-            });
-
-            describe("when the user asks to receive an sms", function() {
-                it ("should send an sms", function() {
-                    return tester
-                        .input('2')
-                        .check.interaction({
-                            state: 'states:search:sms',
-                            reply: 'An sms has been sent to you'
                         })
                         .run();
                 });

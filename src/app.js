@@ -98,7 +98,16 @@ go.app = function() {
                     new Choice('states:end', 'Exit')],
 
                 next: function(choice) {
-                    return choice.value;
+                    if (choice.value == 'states:start' || choice.value == 'states:end') {
+                        return choice.value;
+                    } else {
+                        return {
+                            name: choice.value,
+                            creator_opts: {
+                                details: opts.details
+                            }
+                        };
+                    }
                 }
             });
         });

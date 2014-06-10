@@ -45,6 +45,12 @@ module.exports = function() {
                     "sep": "R 41.57", 
                     "id": 2887, 
                     "name": "Asthavent"
+                }, 
+                {
+                    "dosage_form": "inhaler", 
+                    "sep": "R 42.42", 
+                    "id": 5811, 
+                    "name": "Venteze Cfc Free"
                 }
             ]
         }

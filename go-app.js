@@ -59,38 +59,88 @@ go.app = function() {
                     return new Choice(d.id, [d.name, d.sep].join(': '));
                 });
 
+            // insert option to return to main menu every 3 options
+            // 4 options per page, 4th option is that to return
+            for (var i=3; i < choices.length + (choices.length / 4); i+=4) {
+                choices.splice(i, 0, new Choice('states:start', 'Return to menu'));
+            }
+
+            // FOR TESTING
+            for (var j=0; j < choices.length; j++) {
+                console.log(choices[j].label);
+            }
+
             return new PaginatedChoiceState(name, {
                 question: 'Choose your medicine:',
                 choices: choices,
                 characters_per_page: 160,
-                options_per_page: 3,
+                options_per_page: 4,
                 next: function(choice) {
-                    return self
-                        .http.get('http://mpr.code4sa.org/api/detail', {
-                            params: {product: choice.value}
-                        })
-                        .then(function(resp) {
-                            return {
-                                name: 'states:search:details',
-                                creator_opts: {
-                                    details: resp.data
-                                }
-                            };
-                        });     
+                    if (choice.value == 'states:start') {
+                        return choice.value;
+                    } else {
+                        return self
+                            .http.get('http://mpr.code4sa.org/api/detail', {
+                                params: {product: choice.value}
+                            })
+                            .then(function(resp) {
+                                return {
+                                    name: 'states:search:details',
+                                    creator_opts: {
+                                        details: resp.data
+                                    }
+                                };
+                            }); 
+                    }    
                 }
             });
         });
 
         self.states.add('states:search:details', function(name, opts) {
-            return new EndState(name, {
-                text: [
+            return new ChoiceState(name, {
+                question: [
                     opts.details.name,
                     "Schedule: ".concat(opts.details.schedule),
                     "Dosage form: ".concat(opts.details.dosage_form),
                     "Reg. No.: ".concat(opts.details.regno),
                     "SEP: ".concat(opts.details.sep)
                 ].join('\n'),
-                next: 'states:start'
+
+                choices: [
+                    new Choice('states:search:sms', 'SMS medicine details'),
+                    new Choice('states:start', 'Return to menu'),
+                    new Choice('states:end', 'Exit')],
+
+                next: function(choice) {
+                    if (choice.value == 'states:start' || choice.value == 'states:end') {
+                        return choice.value;
+                    } else {
+                        return {
+                            name: choice.value,
+                            creator_opts: {
+                                details: opts.details
+                            }
+                        };
+                    }
+                }
+            });
+        });
+
+        self.states.add('states:search:sms', function(name, opts) {
+            return self.im.outbound.send_to_user({
+                endpoint: 'sms',
+                content: [
+                    opts.details.name,
+                    "Schedule: ".concat(opts.details.schedule),
+                    "Dosage form: ".concat(opts.details.dosage_form),
+                    "Reg. No.: ".concat(opts.details.regno),
+                    "SEP: ".concat(opts.details.sep)
+                ].join('\n')
+            })
+            .then(function() {
+                return new EndState(name, {
+                    text: 'An sms has been sent to you'
+                });
             });
         });
 

@@ -16,7 +16,8 @@ describe("app", function() {
 
             tester
                 .setup.config.app({
-                    name: 'test_app'
+                    name: 'test_app',
+                    endpoints: {sms: {delivery_class: 'sms'}}
                 })
                 .setup(function(api) {
                     fixtures().forEach(api.http.fixtures.add);
@@ -75,7 +76,8 @@ describe("app", function() {
                             "1. Vari-Salbutamol 2Mg/5Ml Syrup: R 22.46",
                             "2. Venteze: R 25.88",
                             "3. Asthavent Syrup: R 26.35",
-                            "4. More"
+                            "4. Return to menu",
+                            "5. More"
                         ].join('\n')
                     })
                     .run();
@@ -121,7 +123,13 @@ describe("app", function() {
                         "sep": "R 41.57", 
                         "id": 2887, 
                         "name": "Asthavent"
-                    }
+                    }, 
+                    {
+                        "dosage_form": "inhaler", 
+                        "sep": "R 42.42", 
+                        "id": 5811, 
+                        "name": "Venteze Cfc Free"
+                    },
                 ];
 
                 tester
@@ -151,10 +159,119 @@ describe("app", function() {
                             "Dosage form: syrup",
                             "Reg. No.: 35/10.2/0142",
                             "SEP: R 22.46", 
-                        ].join('\n'),
+                            "1. SMS medicine details",
+                            "2. Return to menu",
+                            "3. Exit",
+                        ].join('\n')
                     })
-                    .check.reply.ends_session()
                     .run();
+            });
+
+            it ("should return to the main menu", function() {
+                return tester
+                    .input('4')
+                    .check.interaction({
+                        state: 'states:start',
+                        reply: [
+                            'Welcome to the Medicine Price Registry! Please select an option.',
+                            '1. Search for medicine',
+                            '2. Exit'
+                        ].join('\n')
+                    })
+                    .run();
+            });
+
+            it ("should display the next page of results", function() {
+                return tester
+                    .input('5')
+                    .check.interaction({
+                        state: 'states:search:results',
+                        reply: [
+                            "Choose your medicine:",
+                            "1. Asthavent Dp-Caps: R 31.14",
+                            "2. Asthavent Syrup: R 35.94",
+                            "3. Asthavent: R 41.57",
+                            "4. Return to menu",
+                            "5. More", 
+                            "6. Back"
+                        ].join('\n')
+                    })
+                    .run();
+            });
+
+            it ("should display the last page of results", function() {
+                return tester
+                    .setup.user.state.metadata( {page_start: 5} )
+                    .input('5')
+                    .check.interaction({
+                        state: 'states:search:results',
+                        reply: [
+                            "Choose your medicine:",
+                            "1. Venteze Cfc Free: R 42.42",
+                            "2. Return to menu", 
+                            "3. Back"
+                        ].join('\n')
+                    })
+                    .run();
+            });
+        });
+
+        describe("when the user views medicine details", function() {
+
+            beforeEach(function() {
+                var details = {
+                    name: "Vari-Salbutamol 2Mg/5Ml Syrup",
+                    schedule: "S2",
+                    dosage_form: "syrup",
+                    regno: "35/10.2/0142",
+                    sep: "R 22.46"
+                };
+
+                tester
+                    .setup.user.state('states:search:details', {
+                        creator_opts: { details : details }
+                });
+            });
+
+            describe("when the user asks to receive an sms", function() {
+                it ("should send an sms", function() {
+                    return tester
+                        .input('1')
+                        .check.interaction({
+                            state: 'states:search:sms',
+                            reply: 'An sms has been sent to you'
+                        })
+                        .run();
+                });
+            });
+
+            describe("when the user asks to return to the main menu", function() {
+                it ("should return to the main menu", function() {
+                    return tester
+                        .input('2')
+                        .check.interaction({
+                            state: 'states:start',
+                            reply: [
+                                'Welcome to the Medicine Price Registry! Please select an option.',
+                                '1. Search for medicine',
+                                '2. Exit'
+                            ].join('\n')
+                        })
+                        .run();
+                });
+            });
+
+            describe("when the asks to exit", function() {
+                it ("should say thank you and end the session", function() {
+                    return tester
+                        .input('3')
+                        .check.interaction({
+                            state: 'states:end',
+                            reply: 'Thank you!'
+                        })
+                        .check.reply.ends_session()
+                        .run();
+                });
             });
         });
 

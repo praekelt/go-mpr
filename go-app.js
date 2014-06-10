@@ -89,10 +89,10 @@ go.app = function() {
             return new ChoiceState(name, {
                 question: [
                     opts.details.name,
-                    "Schedule: ".concat(opts.details.schedule),
-                    "Dosage form: ".concat(opts.details.dosage_form),
-                    "Reg. No.: ".concat(opts.details.regno),
-                    "SEP: ".concat(opts.details.sep)
+                    "Schedule: " + opts.details.schedule,
+                    "Dosage form: " + opts.details.dosage_form,
+                    "Reg. No.: " + opts.details.regno,
+                    "SEP: " + opts.details.sep
                 ].join('\n'),
 
                 choices: [
@@ -111,10 +111,10 @@ go.app = function() {
                 endpoint: 'sms',
                 content: [
                     opts.details.name,
-                    "Schedule: ".concat(opts.details.schedule),
-                    "Dosage form: ".concat(opts.details.dosage_form),
-                    "Reg. No.: ".concat(opts.details.regno),
-                    "SEP: ".concat(opts.details.sep)
+                    "Schedule: " + opts.details.schedule,
+                    "Dosage form: " + opts.details.dosage_form,
+                    "Reg. No.: " + opts.details.regno,
+                    "SEP: " + opts.details.sep
                 ].join('\n'),
             })
             .then(function() {

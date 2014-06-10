@@ -156,7 +156,7 @@ describe("app", function() {
 
                 it ("should display the last page of medicine details", function() {
                     return tester
-                        .setup.user.state.metadata( {page_start: 5} )
+                        .setup.user.state.metadata( {page_start: 6} )
                         .input('4')
                         .check.interaction({
                             state: 'states:search:results',

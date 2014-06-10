@@ -93,8 +93,8 @@ go.app = function() {
                 ].join('\n'),
 
                 choices: [
-                    new Choice('states:start', 'Return to menu'),
                     new Choice('states:search:sms', 'SMS medicine details'),
+                    new Choice('states:start', 'Return to menu'),
                     new Choice('states:end', 'Exit')],
 
                 next: function(choice) {

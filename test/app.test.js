@@ -193,8 +193,8 @@ describe("app", function() {
                                 "Dosage form: syrup",
                                 "Reg. No.: 35/10.2/0142",
                                 "SEP: R 22.46", 
-                                "1. Return to menu",
-                                "2. SMS medicine details",
+                                "1. SMS medicine details",
+                                "2. Return to menu",
                                 "3. Exit",
                             ].join('\n'),
                         })

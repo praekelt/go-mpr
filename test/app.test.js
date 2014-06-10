@@ -52,8 +52,8 @@ describe("app", function() {
                 });
             });
 
-        describe("when the user enters content to be posted", function() {
-            it("should should post their response", function() {
+        describe("when the user enters medicine to be searched for", function() {
+            it("should send a request to the registry", function() {
                 return tester
                     .setup.user.state('states:search')
                     .input('salbutamol')
@@ -201,6 +201,66 @@ describe("app", function() {
                 });
             });
         });
+
+        describe("when the user views medicine details", function() {
+
+            beforeEach(function() {
+                var details = {
+                    name: "Vari-Salbutamol 2Mg/5Ml Syrup",
+                    schedule: "S2",
+                    dosage_form: "syrup",
+                    regno: "35/10.2/0142",
+                    sep: "R 22.46"
+                };
+
+                tester
+                    .setup.user.state('states:search:details', {
+                        creator_opts: { details : details }
+                });
+            });
+
+            describe("when the user asks to receive an sms", function() {
+                it ("should send an sms", function() {
+                    return tester
+                        .input('1')
+                        .check.interaction({
+                            state: 'states:search:sms',
+                            reply: 'An sms has been sent to you'
+                        })
+                        .run();
+                });
+            });
+
+            describe("when the user asks to return to the main menu", function() {
+                it ("should return to the main menu", function() {
+                    return tester
+                        .input('2')
+                        .check.interaction({
+                            state: 'states:start',
+                            reply: [
+                                'Welcome to the Medicine Price Registry! Please select an option.',
+                                '1. Search for medicine',
+                                '2. Exit'
+                            ].join('\n')
+                        })
+                        .run();
+                });
+            });
+
+            describe("when the asks to exit", function() {
+                it ("should say thank you and end the session", function() {
+                    return tester
+                        .input('3')
+                        .check.interaction({
+                            state: 'states:end',
+                            reply: 'Thank you!'
+                        })
+                        .check.reply.ends_session()
+                        .run();
+                });
+            });
+        });
+
 
         describe("when the user asks to exit", function() {
             it("should say thank you and end the session", function() {

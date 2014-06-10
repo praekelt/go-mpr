@@ -66,9 +66,9 @@ go.app = function() {
             }
 
             // FOR TESTING
-            for (var j=0; j < choices.length; j++) {
-                console.log(choices[j].label);
-            }
+            //for (var j=0; j < choices.length; j++) {
+            //    console.log(choices[j].label);
+            //}
 
             return new PaginatedChoiceState(name, {
                 question: 'Choose your medicine:',
@@ -97,15 +97,41 @@ go.app = function() {
         });
 
         self.states.add('states:search:details', function(name, opts) {
-            return new EndState(name, {
-                text: [
+            return new ChoiceState(name, {
+                question: [
                     opts.details.name,
                     "Schedule: ".concat(opts.details.schedule),
                     "Dosage form: ".concat(opts.details.dosage_form),
                     "Reg. No.: ".concat(opts.details.regno),
                     "SEP: ".concat(opts.details.sep)
                 ].join('\n'),
-                next: 'states:start'
+
+                choices: [
+                    new Choice('states:start', 'Return to menu'),
+                    new Choice('states:search:sms', 'SMS medicine details'),
+                    new Choice('states:end', 'Exit')],
+
+                next: function(choice) {
+                    return choice.value;
+                }
+            });
+        });
+
+        self.states.add('states:search:sms', function(name, opts) {
+            return self.im.outbound.send_to_user({
+                endpoint: 'sms',
+                content: [
+                    opts.details.name,
+                    "Schedule: ".concat(opts.details.schedule),
+                    "Dosage form: ".concat(opts.details.dosage_form),
+                    "Reg. No.: ".concat(opts.details.regno),
+                    "SEP: ".concat(opts.details.sep)
+                ].join('\n'),
+            })
+            .then(function() {
+                return new EndState(name, {
+                    text: 'An sms has been sent to you'
+                });
             });
         });
 

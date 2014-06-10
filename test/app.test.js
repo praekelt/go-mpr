@@ -158,9 +158,11 @@ describe("app", function() {
                             "Dosage form: syrup",
                             "Reg. No.: 35/10.2/0142",
                             "SEP: R 22.46", 
+                            "1. Return to menu",
+                            "2. SMS medicine details",
+                            "3. Exit",
                         ].join('\n'),
                     })
-                    .check.reply.ends_session()
                     .run();
             });
 

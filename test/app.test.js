@@ -158,10 +158,10 @@ describe("app", function() {
                             "Dosage form: syrup",
                             "Reg. No.: 35/10.2/0142",
                             "SEP: R 22.46", 
-                            "1. Return to menu",
-                            "2. SMS medicine details",
+                            "1. SMS medicine details",
+                            "2. Return to menu",
                             "3. Exit",
-                        ].join('\n'),
+                        ].join('\n')
                     })
                     .run();
             });
@@ -175,13 +175,12 @@ describe("app", function() {
                             'Welcome to the Medicine Price Registry! Please select an option.',
                             '1. Search for medicine',
                             '2. Exit'
-                        ].join('\n'),
+                        ].join('\n')
                     })
                     .run();
             });
 
-
-            it ("should display the next page of medicine details", function() {
+            it ("should display the next page of results", function() {
                 return tester
                     .input('5')
                     .check.interaction({
@@ -194,12 +193,12 @@ describe("app", function() {
                             "4. Return to menu",
                             "5. More", 
                             "6. Back"
-                        ].join('\n'),
+                        ].join('\n')
                     })
                     .run();
             });
 
-            it ("should display the last page of medicine details", function() {
+            it ("should display the last page of results", function() {
                 return tester
                     .setup.user.state.metadata( {page_start: 5} )
                     .input('5')
@@ -210,9 +209,68 @@ describe("app", function() {
                             "1. Venteze Cfc Free: R 42.42",
                             "2. Return to menu", 
                             "3. Back"
-                        ].join('\n'),
+                        ].join('\n')
                     })
                     .run();
+            });
+        });
+
+        describe("when the user views medicine details", function() {
+
+            beforeEach(function() {
+                var details = {
+                    name: "Vari-Salbutamol 2Mg/5Ml Syrup",
+                    schedule: "S2",
+                    dosage_form: "syrup",
+                    regno: "35/10.2/0142",
+                    sep: "R 22.46"
+                };
+
+                tester
+                    .setup.user.state('states:search:details', {
+                        creator_opts: { details : details }
+                });
+            });
+
+            describe("when the user asks to return to the main menu", function() {
+                it.only ("should return to the main menu", function() {
+                    return tester
+                        .input('1')
+                        .check.interaction({
+                            state: 'states:start',
+                            reply: [
+                                'Welcome to the Medicine Price Registry! Please select an option.',
+                                '1. Search for medicine',
+                                '2. Exit'
+                            ].join('\n')
+                        })
+                        .run();
+                });
+            });
+
+            describe("when the user asks to receive an sms", function() {
+                it ("should send an sms", function() {
+                    return tester
+                        .input('2')
+                        .check.interaction({
+                            state: 'states:search:sms',
+                            reply: 'An sms has been sent to you'
+                        })
+                        .run();
+                });
+            });
+
+            describe("when the asks to exit", function() {
+                it ("should say thank you and end the session", function() {
+                    return tester
+                        .input('3')
+                        .check.interaction({
+                            state: 'states:end',
+                            reply: 'Thank you!'
+                        })
+                        .check.reply.ends_session()
+                        .run();
+                });
             });
         });
 

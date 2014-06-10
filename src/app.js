@@ -104,12 +104,21 @@ go.app = function() {
                 ].join('\n'),
 
                 choices: [
-                    new Choice('states:start', 'Return to menu'),
                     new Choice('states:search:sms', 'SMS medicine details'),
+                    new Choice('states:start', 'Return to menu'),
                     new Choice('states:end', 'Exit')],
 
                 next: function(choice) {
-                    return choice.value;
+                    if (choice.value == 'states:start' || choice.value == 'states:end') {
+                        return choice.value;
+                    } else {
+                        return {
+                            name: choice.value,
+                            creator_opts: {
+                                details: opts.details
+                            }
+                        };
+                    }
                 }
             });
         });
@@ -123,7 +132,7 @@ go.app = function() {
                     "Dosage form: ".concat(opts.details.dosage_form),
                     "Reg. No.: ".concat(opts.details.regno),
                     "SEP: ".concat(opts.details.sep)
-                ].join('\n'),
+                ].join('\n')
             })
             .then(function() {
                 return new EndState(name, {

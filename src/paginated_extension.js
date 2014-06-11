@@ -12,7 +12,7 @@ go.paginated_extension = function() {
 		self.current_choices = function() {
 			var choices = current_choices();
 			var index = _.findIndex(choices, function(choice) {
-				return choice.label === 'More' || choice.label === 'Back';
+				return choice.value === '__more__' || choice.value === '__back__';
 			});
 
 			choices.splice(index, 0, new Choice('states:start', 'Menu'));

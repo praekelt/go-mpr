@@ -175,6 +175,22 @@ describe("app", function() {
                 });
             });
 
+            describe("when the user selects the menu option", function() {
+                it ("should return to the main menu", function() {
+                    return tester
+                        .input('4')
+                        .check.interaction({
+                            state: 'states:start',
+                            reply: [
+                                'Welcome to the Medicine Price Registry! Please select an option.',
+                                '1. Search for medicine',
+                                '2. Exit'
+                            ].join('\n')
+                        })
+                        .run();
+                });
+            });
+
             describe("when the user selects a search result", function() {
                 it ("should send a request to the registry", function() {
                     return tester

@@ -1,6 +1,33 @@
 var go = {};
 go;
 
+go.paginated_extension = function() {
+	var vumigo = require('vumigo_v02');
+	var _ = require('lodash');
+	var Choice = vumigo.states.Choice;
+	var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
+
+	var MenuChoiceState = PaginatedChoiceState.extend(function(self, name, opts) {
+		PaginatedChoiceState.call(self, name, opts);
+		
+		var current_choices = self.current_choices;
+
+		self.current_choices = function() {
+			var choices = current_choices();
+			var index = _.findIndex(choices, function(choice) {
+				return choice.label === 'More' || choice.label === 'Back';
+			});
+
+			choices.splice(index, 0, new Choice('states:start', 'Menu'));
+
+			return choices;
+		};
+	});
+
+	return {
+		MenuChoiceState: MenuChoiceState
+	};
+}();
 go.app = function() {
     var vumigo = require('vumigo_v02');
     var App = vumigo.App;
@@ -8,8 +35,9 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
-    var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
     var JsonApi = vumigo.http.api.JsonApi;
+    var MenuChoiceState = go.paginated_extension.MenuChoiceState;
+
 
     var GoApp = App.extend(function(self) {
         App.call(self, 'states:start');
@@ -59,7 +87,7 @@ go.app = function() {
                     return new Choice(d.id, [d.name, d.sep].join(': '));
                 });
 
-            return new PaginatedChoiceState(name, {
+            return new MenuChoiceState(name, {
                 question: 'Choose your medicine:',
                 choices: choices,
                 characters_per_page: 160,

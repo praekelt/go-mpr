@@ -5,8 +5,9 @@ go.app = function() {
     var ChoiceState = vumigo.states.ChoiceState;
     var EndState = vumigo.states.EndState;
     var FreeText = vumigo.states.FreeText;
-    var PaginatedChoiceState = vumigo.states.PaginatedChoiceState;
     var JsonApi = vumigo.http.api.JsonApi;
+    var MenuChoiceState = go.paginated_extension.MenuChoiceState;
+
 
     var GoApp = App.extend(function(self) {
         App.call(self, 'states:start');
@@ -56,7 +57,7 @@ go.app = function() {
                     return new Choice(d.id, [d.name, d.sep].join(': '));
                 });
 
-            return new PaginatedChoiceState(name, {
+            return new MenuChoiceState(name, {
                 question: 'Choose your medicine:',
                 choices: choices,
                 characters_per_page: 160,

@@ -77,7 +77,8 @@ describe("app", function() {
                             "1. Vari-Salbutamol 2Mg/5Ml Syrup: R 22.46",
                             "2. Venteze: R 25.88",
                             "3. Asthavent Syrup: R 26.35",
-                            "4. More"
+                            "4. Menu",
+                            "5. More"
                         ].join('\n')
                     })
                     .run();
@@ -141,7 +142,7 @@ describe("app", function() {
             describe("when the user pages through the search results", function() {            
                 it ("should display the second page of medicine details", function() {
                     return tester
-                        .input('4')
+                        .input('5')
                         .check.interaction({
                             state: 'states:search:results',
                             reply: [
@@ -149,8 +150,9 @@ describe("app", function() {
                                 "1. Asthavent Dp-Caps: R 31.14",
                                 "2. Asthavent Syrup: R 35.94",
                                 "3. Asthavent: R 41.57",
-                                "4. More", 
-                                "5. Back"
+                                "4. Menu",
+                                "5. More", 
+                                "6. Back"
                             ].join('\n'),
                         })
                         .run();
@@ -165,7 +167,8 @@ describe("app", function() {
                             reply: [
                                 "Choose your medicine:",
                                 "1. Venteze Cfc Free: R 42.42",
-                                "2. Back"
+                                "2. Menu",
+                                "3. Back"
                             ].join('\n'),
                         })
                         .run();

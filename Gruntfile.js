@@ -8,6 +8,7 @@ module.exports = function (grunt) {
         paths: {
             src: {
                 app: [
+                    'src/paginated_extension.js',
                     'src/app.js'
                 ],
                 prd: [

@@ -1,6 +1,7 @@
 var assert = require('assert');
 var vumigo = require('vumigo_v02');
 var fixtures = require('./fixtures');
+var _ = require('lodash');
 var AppTester = vumigo.AppTester;
 
 
@@ -227,6 +228,20 @@ describe("app", function() {
                         .check.interaction({
                             state: 'states:search:sms',
                             reply: 'An sms has been sent to you'
+                        })
+                        .check(function(api) {
+                            var smses = _.where(api.outbound.store, {
+                                endpoint: 'sms'
+                            });
+                            var sms = smses[0];
+                            assert.equal(smses.length,1);
+                            assert.equal(sms.content, [
+                                "Vari-Salbutamol 2Mg/5Ml Syrup",
+                                "Schedule: S2",
+                                "Dosage form: syrup",
+                                "Reg. No.: 35/10.2/0142",
+                                "SEP: R 22.46"
+                            ].join('\n'));
                         })
                         .run();
                 });

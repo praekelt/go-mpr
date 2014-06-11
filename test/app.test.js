@@ -129,7 +129,7 @@ describe("app", function() {
                         "sep": "R 42.42", 
                         "id": 5811, 
                         "name": "Venteze Cfc Free"
-                    },
+                    }
                 ];
 
                 tester
@@ -276,7 +276,6 @@ describe("app", function() {
                 });
             });
         });
-
 
         describe("when the user asks to exit", function() {
             it("should say thank you and end the session", function() {

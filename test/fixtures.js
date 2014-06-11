@@ -222,5 +222,35 @@ module.exports = function() {
                 }
             ]
         }
+    },
+    {
+        "request": {
+            "method": "GET",
+            "url": "http://mpr.code4sa.org/api/detail",
+            "params": {
+                "product": "4333"
+            }
+        },
+        "response": {
+            "code": 200,
+            "data": {
+                "num_packs": 1, 
+                "is_generic": "Generic", 
+                "name": "Vari-Salbutamol 2Mg/5Ml Syrup", 
+                "regno": "35/10.2/0142", 
+                "schedule": "S2", 
+                "pack_size": 100.0, 
+                "ingredients": [
+                    {
+                        "strength": 2, 
+                        "name": "Salbutamol", 
+                        "unit": "mg/5ml"
+                    }
+                ], 
+                "sep": "R 22.46", 
+                "id": 4333, 
+                "dosage_form": "syrup"
+            }
+        }
     }];
 };

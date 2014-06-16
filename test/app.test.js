@@ -26,38 +26,21 @@ describe("app", function() {
         });
 
         describe("when the user starts a session", function() {
-            it("should ask them to select an option", function() {
+            it("should ask them search for medicine", function() {
                 return tester
                     .start()
                     .check.interaction({
                         state: 'states:start',
-                        reply: [
-                            'Welcome to the Medicine Price Registry! Please select an option.',
-                            '1. Search for medicine',
-                            '2. Exit'
-                        ].join('\n')
+                        reply: 'Welcome to the Medicine Price Registry! Please enter a medicine to search for.'
                     })
                     .run();
             });
         });
 
-        describe("when the user chooses to search for medicine", function() {
-                it("should ask them to enter medicine name", function() {
-                    return tester
-                        .setup.user.state('states:start')
-                        .input('1')
-                        .check.interaction({
-                            state: 'states:search',
-                            reply: 'Which medicine would you like to search for?'
-                        })
-                        .run();
-                });
-            });
-
         describe("when the user enters medicine to be searched for", function() {
             it("should send a request to the registry", function() {
                 return tester
-                    .setup.user.state('states:search')
+                    .setup.user.state('states:start')
                     .input('salbutamol')
                     .check(function(api) {
                         var req = api.http.requests[0];
@@ -68,7 +51,7 @@ describe("app", function() {
 
             it("should tell them the result", function() {
                 return tester
-                    .setup.user.state('states:search')
+                    .setup.user.state('states:start')
                     .input('salbutamol')
                     .check.interaction({
                         state: 'states:search:results',
@@ -181,11 +164,7 @@ describe("app", function() {
                         .input('4')
                         .check.interaction({
                             state: 'states:start',
-                            reply: [
-                                'Welcome to the Medicine Price Registry! Please select an option.',
-                                '1. Search for medicine',
-                                '2. Exit'
-                            ].join('\n')
+                            reply: 'Welcome to the Medicine Price Registry! Please enter a medicine to search for.'
                         })
                         .run();
                 });
@@ -272,11 +251,7 @@ describe("app", function() {
                         .input('2')
                         .check.interaction({
                             state: 'states:start',
-                            reply: [
-                                'Welcome to the Medicine Price Registry! Please select an option.',
-                                '1. Search for medicine',
-                                '2. Exit'
-                            ].join('\n')
+                            reply: 'Welcome to the Medicine Price Registry! Please enter a medicine to search for.'
                         })
                         .run();
                 });
@@ -293,20 +268,6 @@ describe("app", function() {
                         .check.reply.ends_session()
                         .run();
                 });
-            });
-        });
-
-        describe("when the user asks to exit", function() {
-            it("should say thank you and end the session", function() {
-                return tester
-                    .setup.user.state('states:start')
-                    .input('2')
-                    .check.interaction({
-                        state: 'states:end',
-                        reply: 'Thank you!'
-                    })
-                    .check.reply.ends_session()
-                    .run();
             });
         });
     });

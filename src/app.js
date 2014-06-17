@@ -75,13 +75,15 @@ go.app = function() {
                     opts.details.name,
                     "Schedule: " + opts.details.schedule,
                     "Dosage form: " + opts.details.dosage_form,
-                    "Reg. No.: " + opts.details.regno,
+                    "Packs: " + opts.details.num_packs,
+                    "Pack size: " + opts.details.pack_size,
+                    "RegNo: " + opts.details.regno,
                     "SEP: " + opts.details.sep
                 ].join('\n'),
 
                 choices: [
-                    new Choice('states:search:sms', 'SMS medicine details'),
-                    new Choice('states:start', 'Return to menu'),
+                    new Choice('states:search:sms', 'SMS details'),
+                    new Choice('states:start', 'New search'),
                     new Choice('states:end', 'Exit')],
 
                 next: function(choice) {
@@ -106,7 +108,9 @@ go.app = function() {
                     opts.details.name,
                     "Schedule: " + opts.details.schedule,
                     "Dosage form: " + opts.details.dosage_form,
-                    "Reg. No.: " + opts.details.regno,
+                    "Packs: " + opts.details.num_packs,
+                    "Pack size: " + opts.details.pack_size,
+                    "RegNo: " + opts.details.regno,
                     "SEP: " + opts.details.sep
                 ].join('\n'),
             })

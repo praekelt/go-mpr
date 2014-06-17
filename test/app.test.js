@@ -190,10 +190,12 @@ describe("app", function() {
                                 "Vari-Salbutamol 2Mg/5Ml Syrup",
                                 "Schedule: S2",
                                 "Dosage form: syrup",
-                                "Reg. No.: 35/10.2/0142",
+                                "Packs: 1",
+                                "Pack size: 100",
+                                "RegNo: 35/10.2/0142",
                                 "SEP: R 22.46", 
-                                "1. SMS medicine details",
-                                "2. Return to menu",
+                                "1. SMS details",
+                                "2. New search",
                                 "3. Exit",
                             ].join('\n'),
                         })
@@ -209,6 +211,8 @@ describe("app", function() {
                     name: "Vari-Salbutamol 2Mg/5Ml Syrup",
                     schedule: "S2",
                     dosage_form: "syrup",
+                    num_packs: "1",
+                    pack_size: "100",
                     regno: "35/10.2/0142",
                     sep: "R 22.46"
                 };
@@ -237,7 +241,9 @@ describe("app", function() {
                                 "Vari-Salbutamol 2Mg/5Ml Syrup",
                                 "Schedule: S2",
                                 "Dosage form: syrup",
-                                "Reg. No.: 35/10.2/0142",
+                                "Packs: 1",
+                                "Pack size: 100",
+                                "RegNo: 35/10.2/0142",
                                 "SEP: R 22.46"
                             ].join('\n'));
                         })

@@ -47,22 +47,8 @@ go.app = function() {
        };
 
         self.states.add('states:start', function(name) {
-            return new ChoiceState(name, {
-                question: 'Welcome to the Medicine Price Registry! Please select an option.',
-
-                choices: [
-                    new Choice('states:search', 'Search for medicine'),
-                    new Choice('states:end', 'Exit')],
-
-                next: function(choice) {
-                    return choice.value;
-                }
-            });
-        });
-
-        self.states.add('states:search', function(name) {
             return new FreeText(name, {
-                question: 'Which medicine would you like to search for?',
+                question: 'Welcome to the Medicine Price Registry! Please enter a medicine to search for.',
 
                 next: function(content) {
                     return self
@@ -119,13 +105,15 @@ go.app = function() {
                     opts.details.name,
                     "Schedule: " + opts.details.schedule,
                     "Dosage form: " + opts.details.dosage_form,
-                    "Reg. No.: " + opts.details.regno,
+                    "Packs: " + opts.details.num_packs,
+                    "Pack size: " + opts.details.pack_size,
+                    "RegNo: " + opts.details.regno,
                     "SEP: " + opts.details.sep
                 ].join('\n'),
 
                 choices: [
-                    new Choice('states:search:sms', 'SMS medicine details'),
-                    new Choice('states:start', 'Return to menu'),
+                    new Choice('states:search:sms', 'SMS details'),
+                    new Choice('states:start', 'New search'),
                     new Choice('states:end', 'Exit')],
 
                 next: function(choice) {
@@ -150,7 +138,9 @@ go.app = function() {
                     opts.details.name,
                     "Schedule: " + opts.details.schedule,
                     "Dosage form: " + opts.details.dosage_form,
-                    "Reg. No.: " + opts.details.regno,
+                    "Packs: " + opts.details.num_packs,
+                    "Pack size: " + opts.details.pack_size,
+                    "RegNo: " + opts.details.regno,
                     "SEP: " + opts.details.sep
                 ].join('\n'),
             })
